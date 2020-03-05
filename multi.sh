@@ -1,12 +1,6 @@
 #!/bin/bash
  
 
-#TODO
-#1. Change domains to sorted.txt
-#2. Change read file to raw input
-#3. 0 day scanners modules(Fingerprint, JIRA, WEBMIN , etc.)
-#4. Options/command line  args for different things
-
 
 subs()
 {
@@ -76,69 +70,8 @@ done < dorks
 
 }
 
-#googledork()
-#{
-
-#}
 
 
-report()
-{
-
-echo "<!DOCTYPE html>" >> $1/report.html
-echo "<html>" >> $1/report.html
-echo "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" >> $1/report.html
-echo "<style> " >> $1/report.html
-echo "* {" >> $1/report.html  
-echo "box-sizing: border-box; " >> $1/report.html
-echo "}" >> $1/report.html
-echo ".column {" >> $1/report.html
-echo "float: left;" >> $1/report.html
-echo "width: 33.33%;" >> $1/report.html
-echo "padding: 10px;" >> $1/report.html
-echo "height: 350px; " >> $1/report.html
-echo "}" >> $1/report.html
-echo "</style></head><body>"   >> $1/report.html
-echo "<center><h1>"$input" report generated</h1>" >> $1/report.html
-
-for i in $(cat $1/sorted.txt);do
-#screenshots
-shots=$1'/screenshots/'
-filey=`ls $1/screenshots/ |grep $i`
-echo "<div><p>"$filey"</p></div>" >> $1/report.html
-#echo "<div>" >> $1/report.html
-echo  "<div class=\"column\" style=\"background-color:#aaa;\">" >> $1/report.html
-echo   "<h2>Screenshot</h2>" >> $1/report.html
-echo    "<a href=\""$shots$filey"\"><img src=\""$shots$filey"\" width=\"600\" height=\"250\" /></a></div>" >> $1/report.html
-
-#Nmap
-echo "<div class=\"column\" style=\"background-color:#bbb;\">" >> $1/report.html
-echo "<h2>Nmap</h2>" >> $1/report.html
-echo "<div style=\"border:1px solid black;width:600px;height:250px;overflow:scroll;overflow-y:scroll;overflow-x:hidden;\">" >> $1/report.html
-echo "<p style=\"height:250%;\">" >> $1/report.html
-cat $1/nmap/$i >> $1/report.html
-echo "</p>" >> $1/report.html
-echo "</div>  </div>" >> $1/report.html
-
-#Headers
-echo "<div class=\"column\" style=\"background-color:#ccc;\">" >> $1/report.html
-echo "<h2>Headers</h2>" >> $1/report.html
-echo "<div style=\"border:1px solid black;width:600px;height:250px;overflow:scroll;overflow-y:scroll;overflow-x:hidden;\"><p style=\"height:250%;\">" >> $1/report.html
-cat $1/headers/$i >> $1/report.html
-echo "</p></div></div>" >> $1/report.html; 
-done
-
-echo "</body></html>" >> $1/report.html
-
-}
-
-
-
-
-dirsearch()
-{
-cat $1/sorted.txt | while read linez; do /home/jatin/Documents/tools/dirsearch/dirsearch.py -u $2 -w /home/jatin/Documents/wordlists/seclists_dir -e php -t 25 --plain-text-report=$1/dir/$linez; done
-}
 
 
 
@@ -169,20 +102,11 @@ mkdir $line/screenshots
 mkdir $line/dir
 mkdir $line/nmap
 mkdir $line/headers
+githubdorks
 subs  "$domain" "$line"
 screenshots "$line"
 nmapscan "$scan" "$line" "$domain"
 headers "$line"
-#report  "$line"
-#dirsearch "$line" "$domain"
-  #sublist3r.py -d $domain -o $line/domains
-  #webscreenshot.py -i $line/domains -o $line/screenshots
-  #mkdir $line/nmap 2>/dev/null 
-  #mkdir $line/dirsearch 2>/dev/null
- # python /home/jatin/Documents/recon/recon/gobust.py $line/domains  
-  #nmap -sS \-o $line/nmap/$line+tcp $domain
-  #python dirsearch.py -u $domain -w /home/jatin/Documents/wordlists/seclists_dir -e php
-  #dir=/home/jatin/Documents/tools/dirsearch/reports/$domain/'
-  #cp $dir/* $line/dirsearch/$domain/
+
 #done
 done < scope
